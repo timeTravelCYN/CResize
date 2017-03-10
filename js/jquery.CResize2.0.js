@@ -20,14 +20,16 @@
     this.options = $.extend({}, defaultOpts, options);
     this.init();
   }
-
   CResize.prototype = {
     init: function() {
       var self = this;
       this.bindHidePanel();
       $('.' + this.options.itemClass).on('click', function(e){
         e.stopPropagation();
+        if($(this).attr('hasAddResize') !== 'true'){
           self.initResizeBox($(this))
+        }
+        $(this).attr('hasAddResize', 'true')
       })
     },
 
@@ -155,6 +157,7 @@
     triggerResize: function(el) {
       var self = this;
       el.siblings('.' + self.options.itemClass).children('div').remove();
+      el.siblings('.' + self.options.itemClass).attr('hasAddResize', false)
       el.children('div').css({
         display: 'block'
       })
@@ -385,6 +388,7 @@
       var stage = this.options.stage;
       var itemClass = this.options.itemClass;
       $(stage).on('click', function() {
+        $('.' + itemClass).attr('hasAddResize', 'fasle')
         $('.' + itemClass).children('div').remove();
       })
     }
